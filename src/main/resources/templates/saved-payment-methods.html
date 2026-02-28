@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Saved Payment Methods | Nameless Store</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #ffe3f5 0%, #e3f0ff 40%, #e7fff8 100%);
+            color: #3a2b4c;
+        }
+
+        .navbar {
+            width: 100%;
+            padding: 14px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg,
+                #ff9acb, #e9a6ff, #c9afff, #a7c4ff, #8bdcff, #7feaff);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 30;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .nav-right a {
+            margin-left: 12px;
+            text-decoration: none;
+            color: #2b1b3e;
+            font-weight: 600;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.8);
+            padding: 26px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.7);
+            box-shadow: 0 10px 26px rgba(0,0,0,0.15);
+            backdrop-filter: blur(14px);
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 26px;
+            color: #3b2a50;
+        }
+
+        .method-row {
+            padding: 12px 14px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.98);
+            border: 1px solid rgba(230,210,250,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .method-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tag-default {
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: #22c55e;
+            color: white;
+            font-size: 11px;
+            margin-left: 6px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .small-btn {
+            padding: 5px 10px;
+            border-radius: 999px;
+            border: 1px solid #d0c6f5;
+            background: #fff;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .small-btn.danger {
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
+
+        .small-btn:hover {
+            background: #f4f4ff;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 16px;
+            color: #4b7bff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">NAMELESS STORE</div>
+    <div class="nav-right">
+        <a href="/dashboard">Dashboard</a>
+        <a href="/payment/options">Payment Options</a>
+        <a href="/profile">Profile</a>
+    </div>
+</div>
+
+<div class="container">
+    <h2>Saved Payment Methods</h2>
+
+    <div th:if="${#lists.isEmpty(methods)}">
+        <p style="font-size:14px; color:#7b6493;">
+            You have not saved any payment methods yet.
+            Start by adding a <a href="/payment/add/upi">UPI ID</a> or
+            <a href="/payment/add/card">Card</a>.
+        </p>
+    </div>
+
+    <div th:if="${!#lists.isEmpty(methods)}">
+        <div th:each="m : ${methods}" class="method-row">
+            <div class="method-meta">
+                <div>
+                    <span th:text="${m.type} + ' · ' + ${m.provider}"></span>
+                    <span th:if="${m.default}" class="tag-default">Default</span>
+                </div>
+                <div style="font-size:12px; color:#7b6493;">
+                    <span th:if="${m.type == 'UPI'}"
+                          th:text="${m.upiId}"></span>
+                    <span th:if="${m.type == 'CARD'}"
+                          th:text="${m.cardBrand} + ' •••• ' + ${m.cardLast4}"></span>
+                </div>
+                <div style="font-size:12px; color:#a1a1b5;" th:text="${m.label}"></div>
+            </div>
+
+            <div class="actions">
+                <form th:action="@{/payment/set-default/{id}(id=${m.id})}" method="post"
+                      th:if="${!m.default}">
+                    <button class="small-btn" type="submit">Set Default</button>
+                </form>
+
+                <form th:action="@{/payment/delete/{id}(id=${m.id})}" method="post">
+                    <button class="small-btn danger" type="submit">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <a href="/payment/options" class="back-link">← Back to Payment Options</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Details | NeoShop</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", sans-serif;
+            color: #3d3150;
+            background: linear-gradient(135deg, #ffe7f3 0%, #f3e6ff 40%, #e7f3ff 100%);
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR – Rainbow Glass */
+        .navbar {
+            width: 100%;
+            padding: 16px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg,
+                #ff9acb 0%,
+                #e9a6ff 20%,
+                #c9afff 40%,
+                #a7c4ff 60%,
+                #8bdcff 80%,
+                #7feaff 100%
+            );
+            border-bottom: 1px solid rgba(255,255,255,0.35);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            backdrop-filter: blur(14px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #4a2a63;
+        }
+
+        .logo span {
+            color: #7fb7ff;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.55);
+            color: #2d1a3e;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+        }
+
+        /* Glow behind content */
+        .glow {
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(255,185,225,0.8), rgba(190,216,255,0.2));
+            filter: blur(70px);
+            position: absolute;
+            top: 120px;
+            right: 10%;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        /* Card Box */
+        .card {
+            max-width: 900px;
+            margin: 120px auto;
+            padding: 30px 35px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.55);
+            border: 1px solid rgba(255,255,255,0.6);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 10px 35px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            font-size: 26px;
+            color: #4a2a63;
+            margin-bottom: 4px;
+        }
+
+        .subinfo {
+            color: #6b5a7a;
+            font-size: 15px;
+            margin-bottom: 18px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        th {
+            padding: 12px;
+            color: #4a2a63;
+            font-size: 15px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        td {
+            padding: 12px;
+            font-size: 14px;
+            color: #5d4a75;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+
+        .total {
+            text-align: right;
+            margin-top: 22px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #352245;
+        }
+
+        .back-btn {
+            margin-bottom: 20px;
+            margin-left: 7%;
+            text-decoration: none;
+            color: #1fa2ff;
+            font-size: 16px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="glow"></div>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">NAMELESS <span>STORE</span></div>
+
+    <div class="nav-right">
+        <a href="/dashboard" class="nav-btn">🏠 Dashboard</a>
+        <a href="/products" class="nav-btn">🛍 Products</a>
+        <a href="/cart" class="nav-btn">🛒 Cart</a>
+        <a href="/cart/orders" class="nav-btn">📦 My Orders</a>
+    </div>
+</div>
+
+<div class="card" th:object="${order}">
+    <h2>Order #<span th:text="*{id}"></span></h2>
+
+    <div class="subinfo">
+        Placed on 
+        <span th:text="${#temporals.format(order.orderDate, 'dd MMM yyyy HH:mm')}"></span>
+        <br>
+        Status: <b th:text="*{status}"></b>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price (₹)</th>
+            <th>Qty</th>
+            <th>Subtotal (₹)</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="item : *{items}">
+            <td th:text="${item.product.name}"></td>
+            <td th:text="${item.price}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td th:text="${item.subtotal}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="total">
+        Total Paid: ₹ <span th:text="*{totalPrice}"></span>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile | Nameless Store</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #ffe3f5 0%, #e3f0ff 40%, #e7fff8 100%);
+            color: #3a2b4c;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            width: 100%;
+            padding: 14px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg,
+                #ff9acb, #e9a6ff, #c9afff, #a7c4ff, #8bdcff, #7feaff);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 30;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .nav-right {
+    display: flex;
+    gap: 15px;
+}
+.nav-right:hover {
+    background: #fff7ff;
+}
+
+        .nav-right a {
+            margin-left: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            color: #2b1b3e;
+        }
+         .nav-right {
+          background: #ffffff;
+    padding: 8px 18px;
+    border-radius: 800px;
+    border: 1px solid rgba(230, 198, 239, 0.9);
+    cursor: pointer;
+    color: #27163e;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(160,120,210,0.35);
+    gap:8px;
+         }
+        
+
+        /* MAIN LAYOUT */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+            display: flex;
+            gap: 30px;
+        }
+
+        /* LEFT SIDEBAR */
+        .sidebar {
+            width: 260px;
+            background: rgba(255,255,255,0.7);
+            padding: 20px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.5);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .sidebar h3 {
+            margin-bottom: 18px;
+            color: #4b3570;
+        }
+
+        .side-item {
+            padding: 10px 12px;
+            margin: 8px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.9);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .side-item:hover {
+            background: #7feaff;
+            color: #000;
+            transform: translateX(4px);
+        }
+
+        /* PROFILE AREA */
+        .profile-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            gap: 20px;
+            padding: 22px 24px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.5);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8bdcff, #ff9acb);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            font-weight: 700;
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.25);
+        }
+
+        .ph-main {
+            flex: 1;
+        }
+
+        .ph-main h2 {
+            margin: 0;
+            font-size: 26px;
+            color: #3a2357;
+        }
+
+        .ph-main .tag {
+            margin-top: 6px;
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 13px;
+            border-radius: 20px;
+            background: rgba(0,0,0,0.05);
+            color: #5f476f;
+        }
+
+        .ph-main .meta {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #766489;
+        }
+
+        .ph-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-outline {
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid #4b7bff;
+            background: white;
+            color: #4b7bff;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        /* SECTIONS */
+        .section {
+            padding: 20px 24px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.75);
+            border: 1px solid rgba(255,255,255,0.5);
+            backdrop-filter: blur(18px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #3a2357;
+            margin-bottom: 12px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0,1fr));
+            gap: 14px 40px;
+        }
+
+        .field-label {
+            font-size: 13px;
+            color: #7a668f;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .field-value {
+            font-size: 15px;
+            color: #3a2b4c;
+            margin-top: 4px;
+        }
+
+        .muted {
+            color: #9ba3b5;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .profile-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">NAMELESS STORE</div>
+    <div class="nav-right">
+        <a href="/dashboard">🏠 Dashboard</a>
+        <a href="/cart">🛒 Cart</a>
+        <a href="/cart/orders">📦 Orders</a>
+        <a href="/logout">🚪 Logout</a>
+    </div>
+</div>
+
+<div class="container">
+
+  <div class="sidebar">
+    <h3>My Account</h3>
+
+    <div class="side-item" onclick="window.location='/profile'">👤 Profile</div>
+    <div class="side-item" onclick="window.location='/cart/orders'">📦 My Orders</div>
+    <div class="side-item" onclick="window.location='/profile/addresses'">📍 Saved Addresses</div>
+    <div class="side-item" onclick="window.location='/payment/options'">💳 Payment Options</div>
+    <div class="side-item" onclick="window.location='/security'">🔒 Security & Login</div>
+    <div class="side-item" onclick="window.location='/logout'">🚪 Logout</div>
+</div>
+
+
+    <!-- RIGHT SIDE CONTENT -->
+    <div class="profile-area" th:object="${user}">
+
+        <!-- HEADER CARD -->
+        <div class="profile-header">
+            <div class="avatar">
+                <span th:text="${#strings.substring(user.username,0,1).toUpperCase()}">U</span>
+            </div>
+
+            <div class="ph-main">
+                <h2 th:text="*{fullName} ?: *{username}">User Name</h2>
+                <div class="tag">
+                    Role: <span th:text="*{role}">USER</span>
+                </div>
+
+                <div class="meta">
+                    Member since:
+                    <span th:text="*{createdAt} ?: 'Not set'"></span> |
+                    Last login:
+                    <span th:text="*{lastLogin} ?: 'Not available'"></span>
+                </div>
+            </div>
+<div class="ph-actions">
+    <a href="/profile/edit" class="btn-outline" style="text-decoration:none; text-align:center;">
+        Edit Profile
+    </a>
+    <button class="btn-outline">Change Password</button>
+</div>
+
+        </div>
+
+        <!-- PERSONAL INFO -->
+        <div class="section">
+            <div class="section-title">Personal Information</div>
+
+            <div class="detail-grid">
+                <div>
+                    <div class="field-label">Full Name</div>
+                    <div class="field-value" th:text="*{fullName} ?: 'Not added yet'"></div>
+                </div>
+                <div>
+                    <div class="field-label">Username</div>
+                    <div class="field-value" th:text="*{username}"></div>
+                </div>
+                <div>
+                    <div class="field-label">Gender</div>
+                    <div class="field-value" th:text="*{gender} ?: 'Not specified'"></div>
+                </div>
+                <div>
+                    <div class="field-label">Role</div>
+                    <div class="field-value" th:text="*{role}"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT DETAILS -->
+        <div class="section">
+            <div class="section-title">Contact Details</div>
+
+            <div class="detail-grid">
+                <div>
+                    <div class="field-label">Email</div>
+                    <div class="field-value" th:text="*{email} ?: 'Not added yet'"></div>
+                </div>
+                <div>
+                    <div class="field-label">Primary Phone</div>
+                    <div class="field-value" th:text="*{phone} ?: 'Not added yet'"></div>
+                </div>
+                <div>
+                    <div class="field-label">Alternate Phone</div>
+                    <div class="field-value" th:text="*{altPhone} ?: 'Not added yet'"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ADDRESS DETAILS -->
+        <div class="section">
+            <div class="section-title">Address</div>
+
+            <div class="detail-grid">
+                <div>
+                    <div class="field-label">Address Line 1</div>
+                    <div class="field-value" th:text="*{addressLine1} ?: 'Not added yet'"></div>
+                </div>
+                <div>
+                    <div class="field-label">Address Line 2</div>
+                    <div class="field-value muted" th:text="*{addressLine2} ?: 'Optional'"></div>
+                </div>
+                <div>
+                    <div class="field-label">City</div>
+                    <div class="field-value" th:text="*{city} ?: 'Not added yet'"></div>
+                </div>
+                <div>
+                    <div class="field-label">State</div>
+                    <div class="field-value" th:text="*{state} ?: 'Not added yet'"></div>
+                </div>
+                <div>
+                    <div class="field-label">Pincode</div>
+                    <div class="field-value" th:text="*{pincode} ?: 'Not added yet'"></div>
+                </div>
+                <div>
+                    <div class="field-label">Country</div>
+                    <div class="field-value" th:text="*{country} ?: 'Not added yet'"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECURITY -->
+        <div class="section">
+            <div class="section-title">Security</div>
+
+            <div class="detail-grid">
+                <div>
+                    <div class="field-label">Password</div>
+                    <div class="field-value muted">•••••••• (hidden)</div>
+                </div>
+                <div>
+                    <div class="field-label">Account Type</div>
+                    <div class="field-value" th:text="*{role} == 'ADMIN' ? 'Administrator' : 'Regular User'"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

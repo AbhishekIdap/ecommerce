@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Orders</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #ffe7f3, #e7f3ff);
+        }
+
+        .navbar {
+            width: 90%;
+            padding: 16px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(90deg, #ff9acb, #b28bff, #7dd3fc);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-links a {
+            margin-right: 20px;
+            text-decoration: none;
+            background: white;
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            margin-top: 40px;
+            color: #4b1e7a;
+        }
+
+        table {
+            width: 90%;
+            margin: 30px auto;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #b28bff;
+            color: white;
+            font-size: 18px;
+        }
+
+        tr:hover {
+            background: #f4e6ff;
+        }
+
+        .btn-view {
+            padding: 6px 14px;
+            border-radius: 20px;
+            background: #7dd3fc;
+            text-decoration: none;
+            color: black;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <h1 style="color:white; letter-spacing: 1px;">NAMELESS STORE</h1>
+    <div class="nav-links">
+        <a href="/admin/dashboard">🏠 Dashboard</a>
+        <a href="/admin/products">📦 Products</a>
+        <a href="/admin/orders">📜 Orders</a>
+        <a href="/logout" style="background:#ff597b;">🚪 Logout</a>
+    </div>
+</div>
+
+<h2>All Orders</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>User</th>
+            <th>Total Price</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr th:each="order : ${orders}">
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.userId}"></td>
+            <td>₹ <span th:text="${order.totalPrice}"></span></td>
+            <td th:text="${order.status}"></td>
+            <td th:text="${order.orderDate}"></td>
+            <td>
+                <a th:href="@{'/admin/orders/' + ${order.id}}" class="btn-view">View</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

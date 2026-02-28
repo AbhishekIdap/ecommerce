@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Register | NAMELESS STORE</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+            color: #f5ecff;
+            background: radial-gradient(circle at top, #1a0024, #05000b 55%, #02040b 100%);
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            width: 520px;
+            height: 520px;
+            border-radius: 50%;
+            filter: blur(140px);
+            opacity: 0.55;
+            z-index: 0;
+        }
+
+        .blob.left {
+            background: radial-gradient(circle, #ff9a9e 0%, #fecfef 30%, #f5576c 60%);
+            top: -140px;
+            left: -120px;
+            animation: moveLeft 9s ease-in-out infinite alternate;
+        }
+
+        .blob.right {
+            background: radial-gradient(circle, #a18cd1 0%, #fbc2eb 30%, #2b86c5 70%);
+            bottom: -170px;
+            right: -130px;
+            animation: moveRight 10s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes moveLeft {
+            from { transform: translate(0, 0); }
+            to   { transform: translate(30px, 20px); }
+        }
+        @keyframes moveRight {
+            from { transform: translate(0, 0); }
+            to   { transform: translate(-25px, -20px); }
+        }
+
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image:
+              radial-gradient(1px 1px at 20% 20%, rgba(255,255,255,0.4) 0, transparent 40%),
+              radial-gradient(1px 1px at 80% 40%, rgba(255,255,255,0.4) 0, transparent 40%),
+              radial-gradient(1px 1px at 50% 75%, rgba(255,255,255,0.35) 0, transparent 40%);
+            opacity: 0.45;
+            pointer-events: none;
+        }
+
+        .register-wrapper {
+            position: relative;
+            z-index: 5;
+            width: 480px;
+            padding: 34px 34px 30px;
+            border-radius: 22px;
+            background: rgba(10, 6, 25, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            box-shadow:
+                0 0 35px rgba(0, 0, 0, 0.8),
+                0 0 40px rgba(255, 120, 220, 0.45);
+            backdrop-filter: blur(22px);
+        }
+
+        .chip {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            color: #ffd6ff;
+        }
+
+        .title {
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .subtitle {
+            font-size: 13px;
+            color: #d4caff;
+            margin-bottom: 22px;
+        }
+
+        .input-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .input-label {
+            font-size: 13px;
+            color: #dacbff;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(221, 195, 255, 0.45);
+            background: rgba(7, 5, 20, 0.9);
+            color: #fdf9ff;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        .input-field::placeholder {
+            color: rgba(193, 178, 228, 0.7);
+        }
+
+        .input-field:focus {
+            border-color: #ffb8f0;
+            box-shadow: 0 0 12px rgba(255, 184, 240, 0.5);
+            background: rgba(11, 7, 28, 0.98);
+        }
+
+        .btn-main {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border-radius: 999px;
+            border: none;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 40%, #f5576c 80%);
+            color: #2b0024;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            letter-spacing: 0.4px;
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, 0.7),
+                0 0 30px rgba(255, 110, 180, 0.85);
+            transition: 0.18s ease;
+        }
+
+        .btn-main:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 14px 30px rgba(0, 0, 0, 0.8),
+                0 0 35px rgba(255, 150, 200, 0.95);
+        }
+
+        .btn-main:active {
+            transform: translateY(0);
+            box-shadow:
+                0 8px 20px rgba(0, 0, 0, 0.7),
+                0 0 22px rgba(255, 150, 200, 0.8);
+        }
+
+        .footer {
+            margin-top: 18px;
+            font-size: 12px;
+            color: #c2b9ee;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #ffb8f0;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="blob left"></div>
+<div class="blob right"></div>
+<div class="stars"></div>
+
+<div class="register-wrapper">
+    <div class="chip">Create account</div>
+    <div class="title">Join NAMELESS STORE 🌌</div>
+    <div class="subtitle">
+        Make your own account and start building your cosmic cart of favourites.
+    </div>
+
+    <form action="/register" method="post">
+
+        <div class="input-group">
+            <label class="input-label">Username</label>
+            <input type="text"
+                   name="username"
+                   class="input-field"
+                   placeholder="Choose a unique username"
+                   required>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Password</label>
+            <input type="password"
+                   name="password"
+                   class="input-field"
+                   placeholder="Create a strong password"
+                   required>
+        </div>
+
+        <button type="submit" class="btn-main">
+            Create Account
+        </button>
+    </form>
+
+    <div class="footer">
+        Already part of the galaxy?
+        <a href="/login">Login here</a>
+    </div>
+</div>
+
+</body>
+</html>

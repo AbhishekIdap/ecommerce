@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile | Nameless Store</title>
+
+    <style>
+        body {
+            margin: 0; padding: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(145deg, #f3e7ff, #e0f1ff);
+        }
+        .navbar {
+            width: 100%;
+            padding: 14px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg,
+                #ff9acb, #e9a6ff, #c9afff, #a7c4ff, #8bdcff, #7feaff);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .navbar a {
+            margin-left: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            color: #2b1b3e;
+        }
+
+        .container {
+            width: 70%; max-width: 800px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.75);
+            padding: 30px 35px;
+            border-radius: 20px;
+            box-shadow: 0 0 25px rgba(0,0,0,0.15);
+            backdrop-filter: blur(12px);
+        }
+        h2 {
+            text-align: center;
+            font-size: 28px;
+            margin-bottom: 25px;
+            color: #3b2a50;
+        }
+        .group-title {
+            margin-top: 10px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #4b3b67;
+        }
+        .row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 20px;
+        }
+        label {
+            font-weight: bold;
+            color: #4b3b67;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #bfb8d6;
+            margin-top: 6px;
+            margin-bottom: 14px;
+            font-size: 14px;
+        }
+        .btn {
+            width: 100%;
+            background: #4b7bff;
+            color: white;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 17px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background: #6a94ff;
+        }
+        .back {
+            display: block;
+            margin-top: 18px;
+            text-align: center;
+            color: #4b7bff;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .back:hover { color: #6a94ff; }
+
+        @media (max-width: 800px) {
+            .container { width: 90%; }
+            .row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">NAMELESS STORE</div>
+    <div>
+        <a href="/dashboard">🏠 Dashboard</a>
+        <a href="/profile">👤 Profile</a>
+    </div>
+</div>
+
+<div class="container" th:object="${user}">
+    <h2>Edit Profile</h2>
+
+    <form th:action="@{/profile/update}" method="post">
+
+        <!-- PERSONAL INFO -->
+        <div class="group-title">Personal Information</div>
+        <div class="row">
+            <div>
+                <label>Full Name</label>
+                <input type="text" name="fullName" th:value="*{fullName}" required>
+            </div>
+            <div>
+                <label>Gender</label>
+                <select name="gender">
+                    <option value="" th:selected="*{gender} == null">Select</option>
+                    <option value="Male" th:selected="*{gender} == 'Male'">Male</option>
+                    <option value="Female" th:selected="*{gender} == 'Female'">Female</option>
+                    <option value="Other" th:selected="*{gender} == 'Other'">Other</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div class="group-title">Contact Details</div>
+        <div class="row">
+            <div>
+                <label>Email</label>
+                <input type="email" name="email" th:value="*{email}" required>
+            </div>
+            <div>
+                <label>Primary Phone</label>
+                <input type="text" name="phone" th:value="*{phone}">
+            </div>
+            <div>
+                <label>Alternate Phone</label>
+                <input type="text" name="altPhone" th:value="*{altPhone}">
+            </div>
+        </div>
+
+        <!-- ADDRESS -->
+        <div class="group-title">Address</div>
+        <div class="row">
+            <div>
+                <label>Address Line 1</label>
+                <input type="text" name="addressLine1" th:value="*{addressLine1}">
+            </div>
+            <div>
+                <label>Address Line 2</label>
+                <input type="text" name="addressLine2" th:value="*{addressLine2}">
+            </div>
+            <div>
+                <label>City</label>
+                <input type="text" name="city" th:value="*{city}">
+            </div>
+            <div>
+                <label>State</label>
+                <input type="text" name="state" th:value="*{state}">
+            </div>
+            <div>
+                <label>Pincode</label>
+                <input type="text" name="pincode" th:value="*{pincode}">
+            </div>
+            <div>
+                <label>Country</label>
+                <input type="text" name="country" th:value="*{country}">
+            </div>
+        </div>
+
+        <button class="btn" type="submit">Save Changes</button>
+    </form>
+
+    <a href="/profile" class="back">← Back to Profile</a>
+</div>
+
+</body>
+</html>

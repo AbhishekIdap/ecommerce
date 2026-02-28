@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Dashboard | Nameless Store</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #ffe7f3 0%, #f3e6ff 40%, #e7f3ff 100%);
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            width: 100%;
+            padding: 16px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg,
+                #ff9acb 0%,
+                #e9a6ff 20%,
+                #c9afff 40%,
+                #a7c4ff 60%,
+                #8bdcff 80%,
+                #7feaff 100%
+            );
+            box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+            border-bottom: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #2a1d3f;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: #2ecbff;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 14px;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            border-radius: 30px;
+            background: rgba(255,255,255,0.85);
+            text-decoration: none;
+            color: #2b1b3e;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.6);
+            transition: 0.2s ease;
+        }
+
+        .nav-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        /* TITLE */
+        h1 {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 38px;
+            color: #3a235a;
+            font-weight: 800;
+        }
+
+        /* DASHBOARD CARDS */
+        .dashboard-container {
+            width: 85%;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.55);
+            padding: 30px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.7);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.10);
+            backdrop-filter: blur(15px);
+            text-align: center;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #4b2f6b;
+            margin-bottom: 10px;
+        }
+
+        .card-number {
+            font-size: 40px;
+            font-weight: 800;
+            color: #ff4fa5;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">NAMELESS <span>STORE</span></div>
+
+    <div class="nav-right">
+        <a href="/admin-dashboard" class="nav-btn">🏠 Admin Dashboard</a>
+        <a href="/admin/products" class="nav-btn">🛍️ Products</a>
+        <a href="/admin/orders" class="nav-btn">📦 Orders</a>
+        <a href="/admin/add" class="nav-btn">➕ Add Product</a>
+        <a href="/logout" class="nav-btn">🚪 Logout</a>
+    </div>
+</div>
+
+<h1>Admin Dashboard</h1>
+
+<!-- DASHBOARD CARDS -->
+<div class="dashboard-container">
+
+    <div class="card">
+        <div class="card-title">Total Products</div>
+        <div class="card-number" th:text="${totalProducts}">0</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Total Orders</div>
+        <div class="card-number" th:text="${totalOrders}">0</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Total Users</div>
+        <div class="card-number" th:text="${totalUsers}">0</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Pending Orders</div>
+        <div class="card-number" th:text="${pendingOrders}">0</div>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Successful | Nameless Store</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", system-ui, sans-serif;
+            background: radial-gradient(circle at top left, #ffe1f2 0%, #f2e4ff 35%, #def7ff 85%);
+            color: #1f2933;
+        }
+
+        .navbar {
+            width: 100%;
+            padding: 14px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: linear-gradient(90deg,
+                rgba(255,188,222,0.9),
+                rgba(201,167,255,0.92),
+                rgba(139,233,255,0.9));
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 22px rgba(140,90,200,0.25);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #24142f;
+        }
+
+        .logo span { color: #0f9fb7; }
+
+        .nav-right { display: flex; gap: 12px; }
+
+        .nav-btn {
+            padding: 7px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.9);
+            color: #2e1840;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 5px 14px rgba(80,40,120,0.25);
+            transition: 0.18s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 9px 20px rgba(80,40,120,0.4);
+        }
+
+        .main-box {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+            background: rgba(255,255,255,0.85);
+            border-radius: 20px;
+            padding: 30px 40px;
+            border: 1px solid rgba(220,195,245,0.7);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.07),
+                        0 0 35px rgba(190,150,250,0.3);
+        }
+
+        .success-row {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .success-icon {
+            font-size: 42px;
+        }
+
+        .success-text {
+            font-size: 26px;
+            font-weight: 700;
+            color: #2b1737;
+        }
+
+        .sub-text {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .section-box {
+            margin-top: 28px;
+            padding: 22px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.9);
+            border: 1px solid rgba(210,200,240,0.8);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #2b1737;
+            margin-bottom: 14px;
+        }
+
+        .info-row {
+            font-size: 13px;
+            color: #4b5563;
+            margin: 6px 0;
+        }
+
+        .price-box {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.92);
+            border: 1px solid rgba(190,170,230,0.8);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .total-payable {
+            font-weight: 700;
+            color: #1f2933;
+        }
+
+        .btn-wrap {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .home-btn {
+            padding: 12px 26px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #8be9ff, #6bd5ff, #a8c4ff);
+            color: #041018;
+            font-size: 15px;
+            font-weight: 700;
+            text-decoration: none;
+            box-shadow:
+                0 10px 24px rgba(0,0,0,0.12),
+                0 0 26px rgba(140,210,255,0.7);
+            transition: 0.2s ease;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 14px 30px rgba(0,0,0,0.18),
+                0 0 35px rgba(140,210,255,0.9);
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">NAMELESS <span>STORE</span></div>
+    <div class="nav-right">
+        <a href="/dashboard" class="nav-btn">🏠 Dashboard</a>
+        <a href="/products" class="nav-btn">🛍️ Products</a>
+        <a href="/cart/orders" class="nav-btn">📦 Orders</a>
+        <a href="/cart" class="nav-btn">🛒 Cart</a>
+    </div>
+</div>
+
+<!-- MAIN SUCCESS CONTENT -->
+<div class="main-box">
+
+    <div class="success-row">
+        <div class="success-icon">🎉</div>
+        <div class="success-text">Order Placed Successfully!</div>
+    </div>
+
+    <div class="sub-text">
+        Your items will be delivered soon.
+    </div>
+
+    <!-- LOGIN SECTION -->
+    <div class="section-box">
+        <div class="section-title">1. LOGIN DETAILS</div>
+        <div class="info-row">Name: <span th:text="${userName}">User</span></div>
+        <div class="info-row">Mobile: +91XXXXXXXXXX</div>
+    </div>
+
+    <!-- ADDRESS SECTION -->
+    <div class="section-box">
+        <div class="section-title">2. DELIVERY ADDRESS</div>
+        <div class="info-row">Address: Your saved/default shipping address.</div>
+        <div class="info-row">City, District – State</div>
+        <div class="info-row">Pincode: XXXXXXX</div>
+    </div>
+
+    <!-- PRICE DETAILS -->
+    <div class="price-box">
+        <div class="section-title">PRICE DETAILS</div>
+
+        <div class="price-row">
+            <span>Items Price</span>
+            <span>₹ <span th:text="${totalPrice}">0</span></span>
+        </div>
+
+        <div class="price-row">
+            <span>Delivery Fee</span>
+            <span>₹ 0</span>
+        </div>
+
+        <div class="price-row total-payable">
+            <span>Total Payable</span>
+            <span>₹ <span th:text="${totalPrice}">0</span></span>
+        </div>
+    </div>
+
+    <div class="btn-wrap">
+        <a href="/dashboard" class="home-btn">Go to Dashboard</a>
+    </div>
+
+</div>
+
+</body>
+</html>

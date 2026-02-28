@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Details | Nameless Store Admin</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #ffe7f3 0%, #f3e6ff 40%, #e7f3ff 100%);
+            font-family: "Segoe UI", sans-serif;
+            color: #3d3150;
+            overflow-x: hidden;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            width: 90%;
+            padding: 16px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(90deg,
+                #ff9acb 0%,
+                #d4a3ff 25%,
+                #9cd6ff 50%,
+                #aaf8ff 75%,
+                #c2ffe3 100%);
+            box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #3d3150;
+        }
+        .logo span {
+            color: #1e88ff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-size: 16px;
+            padding: 10px 22px;
+            border-radius: 50px;
+            background: white;
+            color: #473b63;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 36px;
+            color: #3d3150;
+        }
+
+        .info-box, .table-box {
+            width: 85%;
+            margin: 25px auto;
+            padding: 25px;
+            background: white;
+            border-radius: 18px;
+            border: 1px solid rgba(0,0,0,0.1);
+            box-shadow: 0 0 18px rgba(0,0,0,0.07);
+        }
+
+        .info-row {
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .label {
+            font-weight: 600;
+            color: #594a7a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f6e8ff;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        td {
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">NAMELESS <span>STORE</span></div>
+
+    <div class="nav-links">
+        <a href="/admin/dashboard">🏠 Dashboard</a>
+        <a href="/admin/products">🛒 Products</a>
+        <a href="/admin/orders">📦 Orders</a>
+        <a href="/logout">🚪 Logout</a>
+    </div>
+</div>
+
+
+<h1>Order #<span th:text="${order.id}"></span></h1>
+
+<!-- ORDER INFO -->
+<div class="info-box">
+    <div class="info-row">
+        <span class="label">User ID:</span>
+        <span th:text="${order.userId}"></span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Status:</span>
+        <span th:text="${order.status}"></span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Total Price:</span>
+        ₹ <span th:text="${order.totalPrice}"></span>
+    </div>
+
+    <div class="info-row">
+        <span class="label">Placed At:</span>
+        <span th:text="${order.orderDate}"></span>
+    </div>
+</div>
+
+
+<!-- ITEMS TABLE -->
+<div class="table-box">
+    <table>
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price (₹)</th>
+                <th>Qty</th>
+                <th>Subtotal (₹)</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="item : ${order.items}">
+                <td th:text="${item.product.name}"></td>
+                <td th:text="${item.price}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td th:text="${item.subtotal}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

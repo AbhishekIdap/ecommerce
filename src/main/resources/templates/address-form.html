@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${address.id} != null ? 'Edit Address | Nameless Store' : 'Add Address | Nameless Store'">
+        Add / Edit Address | Nameless Store
+    </title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #ffe3f5 0%, #e3f0ff 40%, #e7fff8 100%);
+            color: #3a2b4c;
+        }
+
+        .navbar {
+            width: 100%;
+            padding: 14px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg,
+                #ff9acb, #e9a6ff, #c9afff, #a7c4ff, #8bdcff, #7feaff);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 30;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .nav-right a {
+            margin-left: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            color: #2b1b3e;
+        }
+
+        .page-wrapper {
+            width: 90%;
+            max-width: 750px;
+            margin: 30px auto 50px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.8);
+            border-radius: 20px;
+            padding: 26px 28px;
+            border: 1px solid rgba(255,255,255,0.7);
+            box-shadow: 0 4px 22px rgba(0,0,0,0.12);
+            backdrop-filter: blur(16px);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 8px;
+            color: #3a2357;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #806d9a;
+            margin-bottom: 22px;
+        }
+
+        label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #4b3b67;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 11px 12px;
+            border-radius: 12px;
+            border: 1px solid #c8bfdc;
+            margin-bottom: 14px;
+            font-size: 14px;
+            outline: none;
+            background: rgba(255,255,255,0.9);
+        }
+
+        input:focus, textarea:focus {
+            border-color: #4b7bff;
+            box-shadow: 0 0 0 1px rgba(75,123,255,0.25);
+        }
+
+        .row-2 {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0,1fr));
+            gap: 14px;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-pill {
+            flex: 1;
+            min-width: 160px;
+            padding: 11px 16px;
+            border-radius: 999px;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #4b7bff;
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(75,123,255,0.45);
+        }
+
+        .btn-secondary {
+            background: #2ecc71;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(46,204,113,0.4);
+        }
+
+        .btn-ghost {
+            background: #fff;
+            border: 1px solid #bfb8d6;
+            color: #4b7bff;
+        }
+
+        @media (max-width: 700px) {
+            .page-wrapper { width: 94%; }
+            .row-2 { grid-template-columns: 1fr; }
+        }
+    </style>
+
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(autoFill, function () {
+                    alert("Could not fetch location. Please fill manually.");
+                });
+            } else {
+                alert("Location service not supported!");
+            }
+        }
+
+        function autoFill(pos) {
+            let lat = pos.coords.latitude;
+            let lon = pos.coords.longitude;
+
+            fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.address) {
+                        document.getElementById("city").value = data.address.city || data.address.town || "";
+                        document.getElementById("state").value = data.address.state || "";
+                        document.getElementById("pincode").value = data.address.postcode || "";
+                        document.getElementById("country").value = data.address.country || "";
+                    }
+                })
+                .catch(() => alert("Unable to auto-fill address from location."));
+        }
+    </script>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">NAMELESS STORE</div>
+    <div class="nav-right">
+        <a href="/dashboard">🏠 Dashboard</a>
+        <a href="/cart">🛒 Cart</a>
+        <a href="/cart/orders">📦 Orders</a>
+        <a href="/profile">👤 Profile</a>
+        <a href="/logout">🚪 Logout</a>
+    </div>
+</div>
+
+<div class="page-wrapper">
+    <div class="card">
+
+        <h1 th:text="${address.id} != null ? 'Edit Address' : 'Add New Address'">Add New Address</h1>
+        <div class="subtitle">
+            This address will be used for deliveries and billing.
+        </div>
+
+        <form th:action="@{/profile/addresses/save}" method="post" th:object="${address}">
+            <input type="hidden" th:field="*{id}"/>
+
+            <label>Full Name</label>
+            <input type="text" th:field="*{fullName}" required/>
+
+            <label>Phone</label>
+            <input type="text" th:field="*{phone}" required/>
+
+            <label>Address Line 1</label>
+            <input type="text" th:field="*{addressLine1}" required/>
+
+            <label>Address Line 2 (optional)</label>
+            <input type="text" th:field="*{addressLine2}"/>
+
+            <label>Landmark (optional)</label>
+            <input type="text" th:field="*{landmark}"/>
+
+            <div class="row-2">
+                <div>
+                    <label>City</label>
+                    <input id="city" type="text" th:field="*{city}" required/>
+                </div>
+                <div>
+                    <label>State</label>
+                    <input id="state" type="text" th:field="*{state}" required/>
+                </div>
+            </div>
+
+            <div class="row-2">
+                <div>
+                    <label>Pincode</label>
+                    <input id="pincode" type="text" th:field="*{pincode}" required/>
+                </div>
+                <div>
+                    <label>Country</label>
+                    <input id="country" type="text" th:field="*{country}" required/>
+                </div>
+            </div>
+
+            <div class="btn-row">
+                <button type="button" class="btn-pill btn-secondary" onclick="getLocation()">
+                    📍 Use My Location
+                </button>
+
+                <button type="submit" class="btn-pill btn-primary">
+                    <span th:text="${address.id} != null ? 'Update Address' : 'Save Address'">
+                        Save Address
+                    </span>
+                </button>
+            </div>
+        </form>
+
+        <div class="btn-row" style="margin-top:14px;">
+            <a href="/profile/addresses" class="btn-pill btn-ghost" style="text-decoration:none;text-align:center;">
+                ← Back to Saved Addresses
+            </a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+        /* NAVBAR – pastel rainbow glass */
+        .admin-navbar {
+            width: 100%;
+            padding: 14px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: linear-gradient(90deg,
+                #ffb3d9,
+                #e0b7ff,
+                #b7c9ff,
+                #a5e4ff,
+                #b9ffd9
+            );
+            box-shadow: 0 10px 25px rgba(0,0,0,0.20);
+            border-bottom: 1px solid rgba(255,255,255,0.7);
+            backdrop-filter: blur(16px);
+        }
+
+        .admin-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #2b1640;
+            text-transform: uppercase;
+            letter-spacing: 1.3px;
+        }
+
+        .admin-nav-buttons {
+            display: flex;
+            gap: 12px;
+        }
+
+        .admin-btn {
+            padding: 8px 18px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.88);
+            border: 1px solid rgba(255,255,255,0.9);
+            color: #2b1640;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow:
+                0 8px 18px rgba(0,0,0,0.18),
+                0 0 18px rgba(160,195,255,0.7);
+            transition: 0.18s ease;
+        }
+
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow:
+                0 10px 24px rgba(0,0,0,0.22),
+                0 0 22px rgba(144,210,255,0.95);
+            background: #ffffff;
+        }
+    </style>
+</head>
+
+<body>
+<th:block th:fragment="navbar">
+    <div class="admin-navbar">
+        <div class="admin-title">ADMIN PANEL</div>
+
+        <div class="admin-nav-buttons">
+            <a href="/admin-dashboard" class="admin-btn">📊 Dashboard</a>
+            <a href="/admin-product-list" class="admin-btn">📦 Products</a>
+            <a href="/admin-orders" class="admin-btn">🧾 Orders</a>
+            <a href="/add-product" class="admin-btn">➕ Add Product</a>
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

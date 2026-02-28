@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Manage Products | Nameless Store Admin</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(145deg, #f5e6ff, #f2e9ff, #e9f1ff);
+            color: #3a2b4c;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            width: 100%;
+            padding: 14px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg,
+                #ff9acb 0%,
+                #e9a6ff 20%,
+                #c9afff 40%,
+                #a7c4ff 60%,
+                #8bdcff 80%,
+                #7feaff 100%
+            );
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            backdrop-filter: blur(14px);
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #2b1b3e;
+        }
+
+        .logo span { color: #19d4ff; }
+
+        .nav-right { display: flex; gap: 12px; }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.55);
+            color: #2d1a3e;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 35px;
+            font-size: 32px;
+            color: #472a64;
+        }
+
+        .table-box {
+            width: 92%;
+            margin: 35px auto;
+            padding: 25px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.55);
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 0 25px rgba(0,0,0,0.1);
+            backdrop-filter: blur(16px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            padding: 14px;
+            font-size: 15px;
+            color: #3e2a57;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        td {
+            padding: 14px;
+            font-size: 14px;
+            color: #5d4a75;
+            text-align: center;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+
+        img {
+            width: 90px;
+            height: 90px;
+            border-radius: 14px;
+            object-fit: cover;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .edit-btn { background: #1da1ff; }
+        .edit-btn:hover { background: #4bb8ff; }
+
+        .delete-btn { background: #ff3b60; }
+        .delete-btn:hover { background: #ff5c7d; }
+
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">NAMELESS <span>STORE</span></div>
+
+    <div class="nav-right">
+        <a href="/admin/dashboard" class="nav-btn">🏠 Admin Dashboard</a>
+        <a href="/admin/products" class="nav-btn">🛍 Manage Products</a>
+        <a href="/admin/orders" class="nav-btn">📦 Orders</a>
+        <a href="/admin/add" class="nav-btn">➕ Add Product</a>
+        <a href="/logout" class="nav-btn">🚪 Logout</a>
+    </div>
+</div>
+
+<h1>Manage Products</h1>
+
+<!-- ✅ SUCCESS + UNDO MESSAGE (ONLY ONCE) -->
+<div th:if="${msg}"
+     style="margin:20px auto; width:90%; padding:15px;
+            background:#1fa2ff22; border:1px solid #1fa2ff; 
+            border-radius:8px; color:#1fa2ff; font-size:16px;
+            display:flex; justify-content:space-between;">
+
+    <span th:text="${msg}"></span>
+
+    <a th:if="${undoId}"
+       th:href="@{/admin/undo/{id}(id=${undoId})}"
+       style="color:#ff3e3e; text-decoration:underline;">
+        Undo
+    </a>
+</div>
+
+<div class="table-box">
+    <table>
+        <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price (₹)</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="p : ${products}">
+            <td><img th:src="${p.imageUrl}"></td>
+            <td th:text="${p.name}"></td>
+            <td th:text="${p.description}"></td>
+            <td>₹ <span th:text="${p.price}"></span></td>
+
+            <td>
+                <a th:href="@{/admin/edit/{id}(id=${p.id})}">
+                    <button class="btn edit-btn">Edit</button>
+                </a>
+            </td>
+
+            <td>
+                <a th:href="@{/admin/delete/{id}(id=${p.id})}">
+                    <button class="btn delete-btn">Delete</button>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Products | NAMELESS STORE</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #fff5fb;
+            font-family: "Segoe UI", sans-serif;
+            color: #4d3257;
+            overflow-x: hidden;
+        }
+
+        /* PASTEL BLOBS */
+        .blob {
+            position: fixed;
+            width: 430px;
+            height: 430px;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.55;
+            z-index: 0;
+        }
+        .blob.left {
+            top: -120px;
+            left: -110px;
+            background: #ffb3d6;
+        }
+        .blob.right {
+            bottom: -120px;
+            right: -90px;
+            background: #ffd1fb;
+        }
+
+        /* BACK BUTTON */
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            padding: 10px 16px;
+            background: rgba(255,255,255,0.6);
+            border: 1px solid #e6b7d8;
+            border-radius: 12px;
+            color: #b6247e;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 15px rgba(255,150,200,0.35);
+            z-index: 999;
+            transition: 0.2s;
+        }
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px rgba(255,150,200,0.5);
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 110px;
+            font-size: 34px;
+            font-weight: bold;
+            color: #b62a7a;
+        }
+
+        /* SEARCH BAR */
+        #searchBox {
+            width: 60%;
+            padding: 12px;
+            border-radius: 14px;
+            border: 1px solid #e4b2d2;
+            background: rgba(255,255,255,0.8);
+            font-size: 16px;
+            color: #4d2959;
+            backdrop-filter: blur(10px);
+            transition: 0.2s;
+        }
+        #searchBox:focus {
+            outline: none;
+            background: #fff;
+            border-color: #ff94c7;
+            box-shadow: 0 0 12px rgba(255,140,200,0.35);
+        }
+
+        /* GRID */
+        .product-grid {
+            width: 90%;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            z-index: 5;
+            position: relative;
+        }
+
+        /* PRODUCT CARD */
+        .product-card {
+            background: rgba(255,255,255,0.7);
+            border-radius: 18px;
+            padding: 20px;
+            border: 1px solid #f0c6e4;
+            backdrop-filter: blur(12px);
+            box-shadow: 
+                0 0 20px rgba(0,0,0,0.05),
+                0 0 30px rgba(255,180,220,0.25);
+            transition: 0.25s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 0 30px rgba(0,0,0,0.12),
+                0 0 40px rgba(255,150,230,0.35);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 220px;
+            border-radius: 14px;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .price-tag {
+            color: #ff5fa7;
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+
+        /* ADD TO CART BUTTON */
+        .add-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            border-radius: 14px;
+            border: none;
+            font-size: 15px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffb4d4, #ffcfea, #ff94c8);
+            color: #4a0030;
+            cursor: pointer;
+            box-shadow: 
+                0 8px 20px rgba(0,0,0,0.1),
+                0 0 25px rgba(255,150,220,0.45);
+            transition: 0.2s;
+        }
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 12px 30px rgba(0,0,0,0.15),
+                0 0 35px rgba(255,150,235,0.7);
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- BLOBS -->
+<div class="blob left"></div>
+<div class="blob right"></div>
+
+<!-- BACK -->
+<a href="/dashboard" class="back-btn">← Back</a>
+
+<h1>All Products</h1>
+
+<!-- SEARCH -->
+<div style="text-align:center; margin-top:20px;">
+    <input type="text" id="searchBox" placeholder="Search products...">
+</div>
+
+<!-- Live Search Results -->
+<div id="results" class="product-grid" style="margin-top:30px;"></div>
+
+<!-- Products List -->
+<div class="product-grid">
+    <div class="product-card" th:each="p : ${products}">
+<img th:src="${p.imageUrl}" 
+     style="width:100%; height:200px; object-fit:cover; border-radius:16px;">
+
+        <h2 th:text="${p.name}"></h2>
+        <p th:text="${p.description}"></p>
+        <div class="price-tag">₹ <span th:text="${p.price}"></span></div>
+
+        <form th:action="@{/cart/add/{id}(id=${p.id})}" method="post">
+            <button type="submit" class="add-btn">Add to Cart</button>
+        </form>
+    </div>
+</div>
+
+<!-- SEARCH SCRIPT -->
+<script>
+document.getElementById("searchBox").addEventListener("keyup", function () {
+    let q = this.value.trim();
+    if (q.length === 0) {
+        document.getElementById("results").innerHTML = "";
+        return;
+    }
+
+    fetch("/search?query=" + q)
+        .then(res => res.json())
+        .then(data => {
+            let html = "";
+            data.forEach(p => {
+                html += `
+                <div class="product-card">
+                    <img src="${p.imageUrl}" />
+                    <h2>${p.name}</h2>
+                    <p>${p.description}</p>
+                    <div class="price-tag">₹ ${p.price}</div>
+                    <form action="/cart/add/${p.id}" method="post">
+                        <button type="submit" class="add-btn">Add to Cart</button>
+                    </form>
+                </div>`;
+            });
+            document.getElementById("results").innerHTML = html;
+        });
+});
+</script>
+
+</body>
+</html>

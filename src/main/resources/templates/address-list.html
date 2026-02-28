@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Saved Addresses | Nameless Store</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #ffe3f5 0%, #e3f0ff 40%, #e7fff8 100%);
+            color: #3a2b4c;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            width: 100%;
+            padding: 14px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg,
+                #ff9acb, #e9a6ff, #c9afff, #a7c4ff, #8bdcff, #7feaff);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 30;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .nav-right a {
+            margin-left: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            color: #2b1b3e;
+        }
+         .nav-right {
+          background: #ffffff;
+    padding: 8px 18px;
+    border-radius: 800px;
+    border: 1px solid rgba(230, 198, 239, 0.9);
+    cursor: pointer;
+    color: #27163e;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(160,120,210,0.35);
+    gap:8px;
+         }
+
+        .page-wrapper {
+            width: 90%;
+            max-width: 1100px;
+            margin: 30px auto 50px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #3a2357;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: #86749b;
+            margin-bottom: 22px;
+        }
+
+        .add-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: none;
+            background: #4b7bff;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(75,123,255,0.4);
+        }
+
+        .list-grid {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 18px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.8);
+            border-radius: 18px;
+            padding: 18px 20px;
+            border: 1px solid rgba(255,255,255,0.7);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            backdrop-filter: blur(14px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: #3a2357;
+        }
+
+        .default-tag {
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: #2ecc71;
+            color: #fff;
+            font-size: 12px;
+        }
+
+        .phone {
+            font-size: 13px;
+            color: #6f5b88;
+            margin-top: 4px;
+        }
+
+        .address-lines {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #413356;
+            line-height: 1.4;
+        }
+
+        .actions {
+            margin-top: 14px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .btn-chip {
+            padding: 7px 14px;
+            border-radius: 999px;
+            border: none;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #4b7bff;
+            color: #fff;
+        }
+
+        .btn-outline {
+            background: #fff;
+            border: 1px solid #4b7bff;
+            color: #4b7bff;
+        }
+
+        .btn-danger {
+            background: #ff5c5c;
+            color: #fff;
+        }
+
+        .empty {
+            margin-top: 30px;
+            font-size: 15px;
+            color: #7d6c95;
+        }
+
+        @media (max-width: 700px) {
+            .page-wrapper { width: 94%; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">NAMELESS STORE</div>
+    <div class="nav-right">
+        <a href="/dashboard">🏠 Dashboard</a>
+        <a href="/cart">🛒 Cart</a>
+        <a href="/cart/orders">📦 Orders</a>
+        <a href="/profile">👤 Profile</a>
+        <a href="/logout">🚪 Logout</a>
+    </div>
+</div>
+
+<div class="page-wrapper">
+
+    <h1>Saved Addresses</h1>
+    <div class="subtitle">
+        Manage your delivery locations. Choose a default address or add a new one.
+    </div>
+
+    <a class="add-btn" href="/profile/addresses/add">
+        ➕ Add New Address
+    </a>
+
+    <div class="list-grid" th:if="${#lists.size(addresses) > 0}">
+        <div th:each="a : ${addresses}" class="card">
+
+            <div class="card-header">
+                <div>
+                    <div class="card-name" th:text="${a.fullName}">Name</div>
+                    <div class="phone">
+                        📞 <span th:text="${a.phone}"></span>
+                    </div>
+                </div>
+
+                <div th:if="${a.default}">
+                    <span class="default-tag">Default</span>
+                </div>
+            </div>
+
+            <div class="address-lines">
+                <div th:text="${a.addressLine1}"></div>
+                <div th:text="${a.addressLine2}"></div>
+                <div>
+                    <span th:text="${a.city}"></span>,
+                    <span th:text="${a.state}"></span>
+                    - <span th:text="${a.pincode}"></span>
+                </div>
+                <div th:text="${a.country}"></div>
+                <div th:if="${a.landmark}">
+                    Landmark: <span th:text="${a.landmark}"></span>
+                </div>
+            </div>
+
+            <div class="actions">
+                <a th:href="@{'/profile/addresses/edit/' + ${a.id}}"
+                   class="btn-chip btn-outline">Edit</a>
+
+                <a th:href="@{'/profile/addresses/delete/' + ${a.id}}"
+                   class="btn-chip btn-danger">Delete</a>
+
+                <a href="#" class="btn-chip btn-primary">
+                    Deliver to this address
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="empty" th:if="${#lists.size(addresses) == 0}">
+        You have no saved addresses yet. Click <b>“Add New Address”</b> to create one.
+    </div>
+
+</div>
+
+</body>
+</html>

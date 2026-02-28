@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Options | Nameless Store</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #ffe3f5 0%, #e3f0ff 40%, #e7fff8 100%);
+            color: #3a2b4c;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            width: 100%;
+            padding: 14px 6%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg,
+                #ff9acb, #e9a6ff, #c9afff, #a7c4ff, #8bdcff, #7feaff);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 30;
+        }
+        .nav-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-btn {
+    background: #ffffff;
+    padding: 8px 18px;
+    border-radius: 800px;
+    border: 1px solid rgba(230, 198, 239, 0.9);
+    cursor: pointer;
+    color: #27163e;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 6px 16px rgba(160,120,210,0.35);
+}
+
+.nav-btn:hover {
+    background: #fff7ff;
+}
+        
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+
+        .nav-right a {
+            margin-left: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            color: #2b1b3e;
+        }
+        
+
+        /* MAIN LAYOUT */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 28px;
+        }
+
+        /* LEFT SIDEBAR */
+        .sidebar {
+            background: rgba(255,255,255,0.8);
+            padding: 20px;
+            border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.6);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        .sidebar h3 {
+            margin-bottom: 18px;
+            color: #4b3570;
+        }
+
+        .side-item {
+            padding: 10px 12px;
+            margin: 8px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            background: rgba(255,255,255,0.95);
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+
+        .side-item:hover {
+            background: #7feaff;
+            color: #000;
+            transform: translateX(4px);
+        }
+
+        /* RIGHT AREA */
+        .content {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .section-card {
+            padding: 22px 24px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.85);
+            border: 1px solid rgba(255,255,255,0.7);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #3a2357;
+            margin-bottom: 10px;
+        }
+
+        .section-sub {
+            font-size: 14px;
+            color: #7d6c93;
+            margin-bottom: 18px;
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+            gap: 16px;
+        }
+
+        .option-card {
+            padding: 16px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.95);
+            border: 1px solid rgba(230,210,250,0.9);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .option-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+        }
+
+        .option-title {
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .chip {
+            padding: 4px 8px;
+            border-radius: 999px;
+            background: rgba(244,240,255,0.9);
+            font-size: 12px;
+            color: #5f4b86;
+        }
+
+        .primary-btn {
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: #4b7bff;
+            color: #fff;
+            border: none;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .primary-btn:hover {
+            background: #668eff;
+        }
+
+        /* SAVED METHODS LIST (PREVIEW) */
+        .method-row {
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.95);
+            border: 1px solid rgba(235,220,255,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .method-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .tag-default {
+            padding: 2px 8px;
+            border-radius: 999px;
+            background: #22c55e;
+            color: white;
+            font-size: 11px;
+            margin-left: 8px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .small-btn {
+            padding: 5px 10px;
+            border-radius: 999px;
+            border: 1px solid #d0c6f5;
+            background: #fff;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .small-btn.danger {
+            border-color: #fecaca;
+            color: #b91c1c;
+        }
+
+        .small-btn:hover {
+            background: #f4f4ff;
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">NAMELESS STORE</div>
+  <div class="nav-buttons">
+    <a href="/dashboard" class="nav-btn">🏠 Dashboard</a>
+    <a href="/cart" class="nav-btn">🛒 Cart</a>
+    <a href="/profile" class="nav-btn">👤 Profile</a>
+</div>
+
+</div>
+
+<div class="container">
+
+  <div class="sidebar">
+    <h3>My Account</h3>
+
+    <div class="side-item" onclick="window.location='/profile'">👤 Profile</div>
+    <div class="side-item" onclick="window.location='/cart/orders'">📦 My Orders</div>
+    <div class="side-item" onclick="window.location='/profile/addresses'">📍 Saved Addresses</div>
+    <div class="side-item" onclick="window.location='/payment/options'">💳 Payment Options</div>
+    <div class="side-item" onclick="window.location='/security'">🔒 Security & Login</div>
+    <div class="side-item" onclick="window.location='/logout'">🚪 Logout</div>
+</div>
+
+
+    <!-- RIGHT CONTENT -->
+    <div class="content" th:object="${user}">
+
+        <!-- MAIN PAYMENT MODES -->
+        <div class="section-card">
+            <div class="section-title">Choose how you like to pay</div>
+            <div class="section-sub">
+                Add multiple payment methods and set one as default for quick checkout.
+            </div>
+
+            <div class="payment-grid">
+
+                <!-- UPI -->
+                <div class="option-card" onclick="location.href='/payment/add/upi'">
+                    <div class="option-title">UPI Apps</div>
+                    <div class="section-sub" style="margin-bottom:6px;">Instant payments via UPI handle.</div>
+                    <div class="chips">
+                        <span class="chip">Google Pay</span>
+                        <span class="chip">PhonePe</span>
+                        <span class="chip">Paytm</span>
+                        <span class="chip">BHIM</span>
+                    </div>
+                    <button class="primary-btn" type="button">➕ Add UPI ID</button>
+                </div>
+
+                <!-- Cards -->
+                <div class="option-card" onclick="location.href='/payment/add/card'">
+                    <div class="option-title">Debit / Credit Cards</div>
+                    <div class="section-sub" style="margin-bottom:6px;">Save cards securely for faster checkout.</div>
+                    <div class="chips">
+                        <span class="chip">Visa</span>
+                        <span class="chip">Mastercard</span>
+                        <span class="chip">RuPay</span>
+                    </div>
+                    <button class="primary-btn" type="button">➕ Add New Card</button>
+                </div>
+
+                <!-- Net Banking -->
+                <div class="option-card">
+                    <div class="option-title">Net Banking</div>
+                    <div class="section-sub" style="margin-bottom:6px;">Pay using your internet banking credentials.</div>
+                    <div class="chips">
+                        <span class="chip">SBI</span>
+                        <span class="chip">HDFC</span>
+                        <span class="chip">ICICI</span>
+                        <span class="chip">Axis</span>
+                    </div>
+                    <button class="primary-btn" type="button">Coming Soon</button>
+                </div>
+
+                <!-- Wallets -->
+                <div class="option-card">
+                    <div class="option-title">Wallets & Others</div>
+                    <div class="section-sub" style="margin-bottom:6px;">Use popular wallets & pay-later options.</div>
+                    <div class="chips">
+                        <span class="chip">Paytm Wallet</span>
+                        <span class="chip">PhonePe Wallet</span>
+                        <span class="chip">Amazon Pay</span>
+                    </div>
+                    <button class="primary-btn" type="button">Coming Soon</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SAVED METHODS PREVIEW -->
+        <div class="section-card">
+            <div class="section-title">Saved Payment Methods</div>
+            <div class="section-sub">
+                Methods linked to your account.
+                <a href="/payment/saved" style="font-weight:600; color:#4b7bff; text-decoration:none;">
+                    View full list →
+                </a>
+            </div>
+
+            <div th:if="${#lists.isEmpty(methods)}">
+                <p style="font-size:14px; color:#7d6c93;">
+                    You don't have any saved payment methods yet.
+                    Start by adding a <a href="/payment/add/upi">UPI ID</a> or
+                    <a href="/payment/add/card">Card</a>.
+                </p>
+            </div>
+
+            <div th:if="${!#lists.isEmpty(methods)}">
+                <div th:each="m : ${methods}" class="method-row">
+                    <div class="method-meta">
+                        <div>
+                            <span th:text="${m.type} + ' · ' + ${m.provider}"></span>
+                            <span th:if="${m.default}" class="tag-default">Default</span>
+                        </div>
+                        <div style="font-size:12px; color:#7b6493;">
+                            <span th:if="${m.type == 'UPI'}"
+                                  th:text="${m.upiId}"></span>
+                            <span th:if="${m.type == 'CARD'}"
+                                  th:text="${m.cardBrand} + ' •••• ' + ${m.cardLast4}"></span>
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <form th:action="@{/payment/set-default/{id}(id=${m.id})}" method="post"
+                              th:if="${!m.default}">
+                            <button class="small-btn" type="submit">Set Default</button>
+                        </form>
+
+                        <form th:action="@{/payment/delete/{id}(id=${m.id})}" method="post">
+                            <button class="small-btn danger" type="submit">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

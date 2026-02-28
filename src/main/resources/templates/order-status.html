@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Order Status | Nameless Store</title>
+
+    <style>
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", sans-serif;
+            color: #3d3150;
+            background: linear-gradient(135deg, #ffe7f3 0%, #f3e6ff 40%, #e7f3ff 100%);
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        /* NAVBAR – Rainbow Glass */
+        .navbar {
+            width: 100%;
+            padding: 16px 7%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(90deg,
+                #ff9acb 0%,
+                #e9a6ff 20%,
+                #c9afff 40%,
+                #a7c4ff 60%,
+                #8bdcff 80%,
+                #7feaff 100%
+            );
+            border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            backdrop-filter: blur(14px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: #4a2a63;
+        }
+
+        .logo span {
+            color: #7fb7ff;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 12px;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.55);
+            color: #2d1a3e;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+        }
+
+        /* GLOW EFFECT */
+        .glow-circle {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255,185,225,0.9), rgba(190,216,255,0.2));
+            filter: blur(55px);
+            position: absolute;
+            top: 120px;
+            right: 10%;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* MAIN STATUS BOX */
+        .box {
+            background: rgba(255,255,255,0.45);
+            backdrop-filter: blur(18px);
+            width: 500px;
+            margin: 120px auto 0 auto;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: 0 10px 34px rgba(0,0,0,0.1);
+        }
+
+        .box h1 {
+            font-size: 26px;
+            color: #4a2a63;
+            margin-bottom: 10px;
+        }
+
+        .back-btn {
+            margin-top: 20px;
+            text-decoration: none;
+            color: #1fa2ff;
+            font-size: 18px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="glow-circle"></div>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">NAMELESS <span>STORE</span></div>
+
+    <div class="nav-right">
+        <a href="/dashboard" class="nav-btn">🏠 Dashboard</a>
+        <a href="/products" class="nav-btn">🛍 Products</a>
+        <a href="/cart" class="nav-btn">🛒 Cart</a>
+        <a href="/cart/orders" class="nav-btn">📦 Orders</a>
+    </div>
+</div>
+
+<!-- STATUS CARD -->
+<div class="box">
+    <h1 th:text="${message}"></h1>
+    <a href="/dashboard" class="back-btn">← Back to Dashboard</a>
+</div>
+
+</body>
+</html>
